@@ -16,6 +16,8 @@ import datetime
 from dotenv import load_dotenv
 from google.adk.agents import Agent, LoopAgent
 from google.adk.tools import agent_tool
+
+from google.adk.tools.mcp_tool import MCPToolset, StdioConnectionParams
 from mcp import StdioServerParameters
 
 # ── env/config ───────────────────────────────────────────────────────────────
@@ -119,6 +121,11 @@ trends_mcp_server = StdioServerParameters(
    args=[str(Path(__file__).parent / "server.py")],
 )
 
+trends_mcp = MCPToolset(
+   connection_params=StdioConnectionParams(
+       server_params=trends_mcp_server
+   )
+)
 
 
 root_agent = Agent(
