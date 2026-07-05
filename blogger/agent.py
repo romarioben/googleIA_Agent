@@ -16,6 +16,7 @@ import datetime
 from dotenv import load_dotenv
 from google.adk.agents import Agent, LoopAgent
 from google.adk.tools import agent_tool
+from mcp import StdioServerParameters
 
 # ── env/config ───────────────────────────────────────────────────────────────
 
@@ -111,6 +112,13 @@ planner_tool = agent_tool.AgentTool(agent=robust_blog_planner)
 writer_tool  = agent_tool.AgentTool(agent=robust_blog_writer)
 
 
+# ── MCP Toolset: Google Trends ──────────────────────────────────────────────
+# We point this to our local server.py
+trends_mcp_server = StdioServerParameters(
+   command="python3",
+   args=[str(Path(__file__).parent / "server.py")],
+)
+
 
 
 root_agent = Agent(
@@ -131,7 +139,7 @@ If the trends tool fails or times out, continue with a sensible outline and draf
 Date: {datetime.datetime.now().strftime("%Y-%m-%d")}
 """,
    tools=[
-       #trends_mcp,
+       trends_mcp,
        planner_tool, # calls RobustBlogPlanner
        writer_tool,  # calls RobustBlogWriter
    ],
